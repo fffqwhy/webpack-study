@@ -1,4 +1,6 @@
 const path = require("path");
+const eslint = require("eslint-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
     // 入口
@@ -41,14 +43,36 @@ module.exports = {
                 generator:{
                     filename:"static/img/[hash:10][ext][query]"
                 }
+            },{
+                test: /\.(woff2?|ttf)$/,
+                type: "asset/resource",
+                generator : {
+                    filename:"static/media/[hash:11][ext][query]"
+                }
             },
+            {
+                test: /\.js$/,
+                exclude : /node_modules/, // 排除
+                loader:"babel-loader",
+            }
         ]
             // loader 的配置
     },
     //插件
-    // plugins: [
-
-    // ],
+    plugins: [
+        new eslint({
+            context:path.resolve(__dirname,"src"),
+        }),
+        new HtmlWebpackPlugin({
+            template:'public/index.html'
+        })
+    ],
+    // 开发服务器，
+    devServer:{
+        host:"localhost",
+        port:"8080",
+        open:true
+    },
     //模式
     mode: "development",
 };
