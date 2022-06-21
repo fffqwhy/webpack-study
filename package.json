@@ -5,8 +5,8 @@
   "main": "./src/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack serve",
-    "build": "webpack"
+    "dev": "webpack serve --config ./config/webpack.dev.js",
+    "build": "webpack --config ./config/webpack.prod.js"
   },
   "repository": {
     "type": "git",
@@ -24,11 +24,16 @@
     "@babel/preset-env": "^7.18.2",
     "babel-loader": "^8.2.5",
     "css-loader": "^6.7.1",
+    "css-minimizer-webpack-plugin": "^4.0.0",
     "eslint": "^8.18.0",
     "eslint-webpack-plugin": "^3.1.1",
     "html-webpack-plugin": "^5.5.0",
     "less": "^4.1.3",
     "less-loader": "^11.0.0",
+    "mini-css-extract-plugin": "^2.6.1",
+    "postcss": "^8.4.14",
+    "postcss-loader": "^7.0.0",
+    "postcss-preset-env": "^7.7.1",
     "sass-loader": "^13.0.0",
     "scss": "^0.2.4",
     "scss-loader": "0.0.1",
@@ -41,5 +46,8 @@
   },
   "dependencies": {
     "sass": "^1.52.3"
-  }
+  },
+  "browerslist": [
+    "ie>=8"
+  ]
 }
