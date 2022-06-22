@@ -41,45 +41,52 @@ module.exports = {
     // 加载器
     module: {
         rules: [{
-                test: /\.css$/,
-                use: getcssLoader()
-            },
-            {
-                test: /\.less$/,
-                use: getcssLoader("less-loader")
-            },
-            {
-                test: /\.s[ac]ss$/,
-                use:getcssLoader("sass-loader")
-            }, {
-                test: /\.styl$/,
-                use: getcssLoader("stylus-loader")
-            }, {
-                test: /\.(png|jpe?g|gif|webp|svg)$/,
-                type: "asset",
-                parser: {
-                    dataUrlCondition: {
-                        // 小于4kb的图片转换为base64 减少请求数量
-                        // 图片转换为base64 过程中会增加三分之一的大小，大图片转为base64 不合适，还是走请求吧
-                        maxSize: 4 * 1024,
-                    },
+            oneOf: [{
+                    test: /\.css$/,
+                    use: getcssLoader()
                 },
-                generator: {
-                    filename: "static/img/[hash:10][ext][query]"
+                {
+                    test: /\.less$/,
+                    use: getcssLoader("less-loader")
+                },
+                {
+                    test: /\.s[ac]ss$/,
+                    use: getcssLoader("sass-loader")
+                }, {
+                    test: /\.styl$/,
+                    use: getcssLoader("stylus-loader")
+                }, {
+                    test: /\.(png|jpe?g|gif|webp|svg)$/,
+                    type: "asset",
+                    parser: {
+                        dataUrlCondition: {
+                            // 小于4kb的图片转换为base64 减少请求数量
+                            // 图片转换为base64 过程中会增加三分之一的大小，大图片转为base64 不合适，还是走请求吧
+                            maxSize: 4 * 1024,
+                        },
+                    },
+                    generator: {
+                        filename: "static/img/[hash:10][ext][query]"
+                    }
+                }, {
+                    test: /\.(woff2?|ttf)$/,
+                    type: "asset/resource",
+                    generator: {
+                        filename: "static/media/[hash:11][ext][query]"
+                    }
+                },
+                {
+                    test: /\.js$/,
+                    // exclude: /node_modules/, // 排除
+                    include: path.resolve(__dirname,"../src"),//包含
+                    loader: "babel-loader",
+                    options:{
+                        cacheDirectory:true, // 开启缓存,第一次之后的打包更快
+                        cacheCompression:false, // 关闭缓存压缩
+                    }
                 }
-            }, {
-                test: /\.(woff2?|ttf)$/,
-                type: "asset/resource",
-                generator: {
-                    filename: "static/media/[hash:11][ext][query]"
-                }
-            },
-            {
-                test: /\.js$/,
-                exclude: /node_modules/, // 排除
-                loader: "babel-loader",
-            }
-        ]
+            ]
+        }]
         // loader 的配置
     },
     //插件
@@ -89,6 +96,9 @@ module.exports = {
         }),
         new eslint({
             context: path.resolve(__dirname, "../src"),
+            exclude: "node_modules", // 默认是这个
+            cache:true,
+            cacheLocation: path.resolve(__dirname,"../node_modules/.cache/qqEslintcaches")
         }),
         new HtmlWebpackPlugin({
             template: 'public/index.html'
@@ -97,4 +107,6 @@ module.exports = {
     ],
     //模式
     mode: "production",
+    // 打包-源码映射
+    devtool: "source-map"
 };

@@ -26,3 +26,18 @@ css-minimizer-webpack-plugin 压缩处理css,
 之后高级优化部分：提升开发体验，提升打包速度，减少打包体积，优化代码性能
 
 高级优化开始：
+devtool:打包文件映射，当代码出现错误时，通过映射找到真正代码出现错误的地方，
+值：cheap-module-source-map 开发环境使用 定位到行 快点
+    source-map 生产环境使用  定位到行和列 慢
+
+HMR : HOT M R  热更新
+只更新修改的部分 不包括js 文件的部分，js文件改变后还是会刷新页面
+需要进行配置
+
+oneOf : loader 匹配过程中会走完所有loader，当配置oneOf后，匹配到之后就不再匹配后面的loader
+生产环境和开发环境都适用
+
+
+include / exclude   在具体项中配置 只能使用一种
+
+配置缓存, 在具体配置项中,添加options :{ cache....: true} 等, 开启缓存,缓存的代码会保存在node_module中的.cache中
