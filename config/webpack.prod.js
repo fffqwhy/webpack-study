@@ -1,8 +1,12 @@
 const path = require("path");
+const os = require("os");
 const eslint = require("eslint-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const terser = require("terser-webpack-plugin");
+
+const threads = os.cpus().length;
 
 function getcssLoader(pre) {
     return [
@@ -78,12 +82,20 @@ module.exports = {
                 {
                     test: /\.js$/,
                     // exclude: /node_modules/, // 排除
-                    include: path.resolve(__dirname,"../src"),//包含
-                    loader: "babel-loader",
-                    options:{
-                        cacheDirectory:true, // 开启缓存,第一次之后的打包更快
-                        cacheCompression:false, // 关闭缓存压缩
-                    }
+                    include: path.resolve(__dirname, "../src"), //包含
+                    use: [{
+                        loader: "thread-loader", // 开启进程
+                        options: {
+                            works: threads, // 进程数量
+                        }
+                    }, {
+                        loader: "babel-loader",
+                        options: {
+                            cacheDirectory: true, // 开启缓存,第一次之后的打包更快
+                            cacheCompression: false, // 关闭缓存压缩
+                        }
+                    }]
+
                 }
             ]
         }]
@@ -97,13 +109,17 @@ module.exports = {
         new eslint({
             context: path.resolve(__dirname, "../src"),
             exclude: "node_modules", // 默认是这个
-            cache:true,
-            cacheLocation: path.resolve(__dirname,"../node_modules/.cache/qqEslintcaches")
+            cache: true,
+            cacheLocation: path.resolve(__dirname, "../node_modules/.cache/qqEslintcaches"),
+            threads, // 开启进程数量
         }),
         new HtmlWebpackPlugin({
             template: 'public/index.html'
         }),
-        new CssMinimizerPlugin()
+        new CssMinimizerPlugin(),
+        new terser({
+            parallel:threads,
+        })
     ],
     //模式
     mode: "production",

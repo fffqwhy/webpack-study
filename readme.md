@@ -41,3 +41,5 @@ oneOf : loader 匹配过程中会走完所有loader，当配置oneOf后，匹配
 include / exclude   在具体项中配置 只能使用一种
 
 配置缓存, 在具体配置项中,添加options :{ cache....: true} 等, 开启缓存,缓存的代码会保存在node_module中的.cache中
+
+多进程打包
