@@ -7,7 +7,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const eslint = require('eslint-webpack-plugin');
 const isDevelopment = process.env.NODE_ENV !== "production";
 module.exports = {
-  entry: "./src/index.tsx",
+  entry: "./src/main.tsx",
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "assets/js/[name].[contenthash].js",
