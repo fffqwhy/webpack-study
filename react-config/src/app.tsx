@@ -1,16 +1,14 @@
 import React, { FunctionComponent } from "react";
-import Todo from "./pages/home/todo";
+import { RouterProvider } from "react-router-dom";
+
 import './app.less';
-import TestTable from "./pages/home/table";
+import router from "./route";
 interface AppProps {
 
 }
 
 const App: FunctionComponent<AppProps> = () => {
-    return (<div>
-        <Todo />
-        <TestTable />
-    </div>);
+    return (<RouterProvider router={router} />);
 }
 
 export default App;
