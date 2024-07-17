@@ -16,7 +16,8 @@
     "rules": {
       "react/prop-types": "off",
       "no-unreachable": "off",
-      "no-unused-vars": "warn"
+      "no-unused-vars": "warn",
+      "@typescript-eslint/no-explicit-any": "off"
     },
     "settings": {
       "react": {
