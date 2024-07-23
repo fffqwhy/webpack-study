@@ -4,6 +4,7 @@ import Todo from "../pages/home/todo";
 import TestTable from "../pages/home/table";
 import Home from "../pages/home";
 import UserManagement from "../pages/userManagement";
+import Globalization from "../pages/i18nComponent";
 
 const router = createHashRouter([
     {
@@ -27,6 +28,10 @@ const router = createHashRouter([
     {
         path: "user",
         element: <UserManagement />
+    },
+    {
+        path: "i18n",
+        element: <Globalization />
     },
     {
         path: "",
