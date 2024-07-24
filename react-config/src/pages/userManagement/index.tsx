@@ -5,6 +5,7 @@ import { storeT } from "../../redux/store";
 import { Button, Space } from "antd";
 import { fetchData, setUserInfo } from "../../redux/action/user";
 import { queryEmployeesTableUserList } from "../../api/goService";
+import { useTranslation } from "react-i18next";
 
 interface UserManagementProps {
 
@@ -12,6 +13,8 @@ interface UserManagementProps {
 
 const UserManagement: FunctionComponent<UserManagementProps> = () => {
     const dispatch = useDispatch();
+  const { t } = useTranslation();
+
     const [userList, setUserList] = useState<any[]>([])
     const { userName, loginTime } = useSelector<storeT, storeT["userInfoReducer"]>((state) => state.userInfoReducer);
     const changeUserInfo = () => {
@@ -23,22 +26,25 @@ const UserManagement: FunctionComponent<UserManagementProps> = () => {
     const getUsers = async () => {
         const res = await queryEmployeesTableUserList();
         console.log(res);
-        if (res?.message) {
-            setUserList(res.message);
+        if (res.code === 200 && res?.data) {
+            setUserList(res.data||[]);
         }
     }
     return (<div>
         <div>
             用户管理{userName}
         </div>
+        <div>
+        {t('bye')}
+        </div>
         <Space>
             <Button type="primary" onClick={changeUserInfo}>修改redux userinfo {(loginTime as Date).getMilliseconds()}</Button>
             <Button type="primary" onClick={changeUserInfoBythunk}>修改redux-thunk {(loginTime as Date).getMilliseconds()}</Button>
             <Button type="primary" onClick={getUsers}>获取go服务的userlist</Button>
         </Space>
-        {userList.map(item => {
+        {(userList && userList.length) ? userList.map(item => {
             return <div key={item.employee_id}>{JSON.stringify(item)}</div>
-        })}
+        }):<span>暂无数据</span>}
     </div>);
 }
 

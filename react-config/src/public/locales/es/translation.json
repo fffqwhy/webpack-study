@@ -1,4 +1,5 @@
 {
     "welcome": "Bienvenido",
-    "description": "Esta es una descripción."
+    "description": "Esta es una descripción.",
+    "bye":"Adiós"
 }

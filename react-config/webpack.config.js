@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const eslint = require('eslint-webpack-plugin');
+const { sourceMapsEnabled } = require('process');
 const isDevelopment = process.env.NODE_ENV !== "production";
 module.exports = {
   entry: "./src/main.tsx",
@@ -144,7 +145,7 @@ module.exports = {
           test: /[\\/]node_modules[\\/]/,
           name(module, chunks, cacheGroupKey) {
             const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/);
-            return `vendors/${(packageName?.length > 1 ? packageName[1]:"packageName").replace("@", "")}`;
+            return `vendors/${(packageName?.length > 1 ? packageName[1] : "packageName").replace("@", "")}`;
           },
           priority: -10,
         },
@@ -165,5 +166,6 @@ module.exports = {
     hot: true,
     historyApiFallback: true,
   },
+  devtool: 'eval-source-map',
   mode: isDevelopment ? "development" : "production"
 }

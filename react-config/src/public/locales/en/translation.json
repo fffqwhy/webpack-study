@@ -1,4 +1,5 @@
 {
     "welcome": "Welcome",
-    "description": "This is a description."
+    "description": "This is a description.",
+    "bye":"byebye"
 }
