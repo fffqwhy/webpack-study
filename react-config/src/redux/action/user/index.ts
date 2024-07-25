@@ -1,6 +1,9 @@
+import { Dispatch } from "redux";
+import { reduxUserInfoI } from "../../reducer/user/type";
+import { AppThunk } from "../../store";
 import { UPDATE_USER_INFO } from "./actionType";
 
-export const setUserInfo = (data: any) => {
+export const setUserInfo = (data: reduxUserInfoI) => {
   return {
     type: UPDATE_USER_INFO,
     data: data,
@@ -8,8 +11,8 @@ export const setUserInfo = (data: any) => {
 };
 
 // 异步action，使用redux-thunk
-export const fetchData = () => {
-  return async (dispatch: any) => {
+export const fetchData = ():AppThunk => {
+  return async (dispatch: Dispatch) => {
     try {
       const res = await new Promise((reslove) => {
         setTimeout(() => {
