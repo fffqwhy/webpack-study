@@ -5,6 +5,7 @@ import TestTable from "../pages/home/table";
 import Home from "../pages/home";
 import UserManagement from "../pages/userManagement";
 import Globalization from "../pages/i18nComponent";
+import WebSocketComponent from "../pages/userManagement/websocket";
 
 const router = createHashRouter([
     {
@@ -32,6 +33,10 @@ const router = createHashRouter([
     {
         path: "i18n",
         element: <Globalization />
+    },
+    {
+        path: "websocket",
+        element: <WebSocketComponent />
     },
     {
         path: "",

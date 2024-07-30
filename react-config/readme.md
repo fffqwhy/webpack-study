@@ -11,6 +11,6 @@
 - 完成 国际化；
 
 todo 完善hooks,类型；
-todo 封装 fetch \axios ; 增加 websocket ; axios 支持取消，支持进度展示，支持打字机模式。
+todo 封装 fetch \axios ; 增加 websocket ;groupQL; axios 支持取消，支持进度展示，支持打字机模式。
 
-todo 计划增加lazy;loader;jest;
+todo 计划增加 suspense ;lazy;loader;jest;

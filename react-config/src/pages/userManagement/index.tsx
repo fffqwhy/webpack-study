@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { storeT } from "../../redux/store";
 import { Button, Space } from "antd";
 import { fetchData, setUserInfo } from "../../redux/action/user";
-import { queryEmployeesTableUserList } from "../../api/goService";
+import { checkProgress, queryEmployeesTableUserList, startCalculation } from "../../api/goService";
 import { useTranslation } from "react-i18next";
 
 interface UserManagementProps {
@@ -13,8 +13,8 @@ interface UserManagementProps {
 
 const UserManagement: FunctionComponent<UserManagementProps> = () => {
     const dispatch = useDispatch();
-  const { t } = useTranslation();
-
+    const { t } = useTranslation();
+    const [percent, setPercent] = useState<number|false>(false);
     const [userList, setUserList] = useState<any[]>([])
     const { userName, loginTime } = useSelector<storeT, storeT["userInfoReducer"]>((state) => state.userInfoReducer);
     const changeUserInfo = () => {
@@ -27,7 +27,30 @@ const UserManagement: FunctionComponent<UserManagementProps> = () => {
         const res = await queryEmployeesTableUserList();
         console.log(res);
         if (res.code === 200 && res?.data) {
-            setUserList(res.data||[]);
+            setUserList(res.data || []);
+        }
+    }
+    const doStartCalculation = async () => {
+        const res = await startCalculation();
+        console.log(res);
+        if (res.status) {
+            docheckProgress()
+        }
+    }
+    const docheckProgress = async () => {
+        const res = await checkProgress();
+        if (res) {
+            
+            const progress = res.progress;
+            const total = res.total;
+            const percentCompleted = Math.round((progress * 100) / total);
+            console.log(res,progress,total,percentCompleted);
+            setPercent(percentCompleted);
+            if (percentCompleted !== 100) {
+                setTimeout(docheckProgress,2000); // 每秒检查一次进度
+            } else {
+                console.log('计算完成');
+            }
         }
     }
     return (<div>
@@ -35,7 +58,7 @@ const UserManagement: FunctionComponent<UserManagementProps> = () => {
             用户管理{userName}
         </div>
         <div>
-        {t('bye')}
+            {t('bye')}
         </div>
         <Space>
             <Button type="primary" onClick={changeUserInfo}>修改redux userinfo {(loginTime as Date).getMilliseconds()}</Button>
@@ -44,7 +67,13 @@ const UserManagement: FunctionComponent<UserManagementProps> = () => {
         </Space>
         {(userList && userList.length) ? userList.map(item => {
             return <div key={item.employee_id}>{JSON.stringify(item)}</div>
-        }):<span>暂无数据</span>}
+        }) : <span>暂无数据</span>}
+        <div style={{ margin: "12px", backgroundColor: "gray", padding: "1.4rem" }}>
+            <Button onClick={doStartCalculation} loading={percent===false?false:percent<100}>开始计算</Button>
+            <div>
+                当前进度：{percent?`${percent}%`:"0"}
+            </div>
+        </div>
     </div>);
 }
 
