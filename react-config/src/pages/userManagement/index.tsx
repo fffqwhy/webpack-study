@@ -6,6 +6,7 @@ import { Button, Space } from "antd";
 import { fetchData, setUserInfo } from "../../redux/action/user";
 import { checkProgress, queryEmployeesTableUserList, startCalculation } from "../../api/goService";
 import { useTranslation } from "react-i18next";
+import StreamCom from "./stream";
 
 interface UserManagementProps {
 
@@ -14,7 +15,7 @@ interface UserManagementProps {
 const UserManagement: FunctionComponent<UserManagementProps> = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
-    const [percent, setPercent] = useState<number|false>(false);
+    const [percent, setPercent] = useState<number | false>(false);
     const [userList, setUserList] = useState<any[]>([])
     const { userName, loginTime } = useSelector<storeT, storeT["userInfoReducer"]>((state) => state.userInfoReducer);
     const changeUserInfo = () => {
@@ -40,14 +41,14 @@ const UserManagement: FunctionComponent<UserManagementProps> = () => {
     const docheckProgress = async () => {
         const res = await checkProgress();
         if (res) {
-            
+
             const progress = res.progress;
             const total = res.total;
             const percentCompleted = Math.round((progress * 100) / total);
-            console.log(res,progress,total,percentCompleted);
+            console.log(res, progress, total, percentCompleted);
             setPercent(percentCompleted);
             if (percentCompleted !== 100) {
-                setTimeout(docheckProgress,2000); // 每秒检查一次进度
+                setTimeout(docheckProgress, 2000); // 每秒检查一次进度
             } else {
                 console.log('计算完成');
             }
@@ -69,10 +70,13 @@ const UserManagement: FunctionComponent<UserManagementProps> = () => {
             return <div key={item.employee_id}>{JSON.stringify(item)}</div>
         }) : <span>暂无数据</span>}
         <div style={{ margin: "12px", backgroundColor: "gray", padding: "1.4rem" }}>
-            <Button onClick={doStartCalculation} loading={percent===false?false:percent<100}>开始计算</Button>
+            <Button onClick={doStartCalculation} loading={percent === false ? false : percent < 100}>开始计算</Button>
             <div>
-                当前进度：{percent?`${percent}%`:"0"}
+                当前进度：{percent ? `${percent}%` : "0"}
             </div>
+        </div>
+        <div>
+            <StreamCom />
         </div>
     </div>);
 }
